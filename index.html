@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QDC-515 | Quantum Drone Communication Interface</title>
+  <meta name="description"
+    content="Army-grade quantum-secure drone RF communication dashboard using BB84 and Post-Quantum Protocols." />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+</head>
+
+<body>
+
+  <div class="app-wrapper">
+
+    <!-- ══ HEADER ══════════════════════════════════════════════ -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="insignia" aria-hidden="true">⚛</div>
+        <div class="app-title">
+          <h1>QDC-515 QUANTUM DRONE COMM</h1>
+          <p>OPERATION CIPHER-HAWK · BB84 + PQP ENABLED · RF SECURE</p>
+        </div>
+      </div>
+
+      <div class="header-center">
+        <div class="status-badge standby" id="status-badge">STANDBY — AWAITING INPUT</div>
+      </div>
+
+      <div class="header-right">
+        <div class="header-stat">
+          <span>UTC TIME</span>
+          <span id="utc-time">00:00:00Z</span>
+        </div>
+        <div class="header-stat">
+          <span>SESSION</span>
+          <span id="session-id">QDC-???</span>
+        </div>
+        <div class="header-stat">
+          <span>SIGNAL</span>
+          <span style="color:#80ff40;">●&nbsp;ACTIVE</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ══ MAIN GRID ════════════════════════════════════════════ -->
+    <main class="main-grid">
+
+      <!-- ── LEFT PANEL: Controls ─────────────────────────────── -->
+      <section class="hud-panel">
+        <div class="panel-title">
+          <div class="dot"></div> INPUT COMMAND MATRIX
+        </div>
+        <div class="panel-body">
+
+          <!-- WASD Keys -->
+          <div class="keys-section">
+            <div class="keys-label">// WASD — 🚁 DRONE MOVEMENT</div>
+            <div class="wasd-cluster">
+              <div style="grid-area:1/2">
+                <div class="key-btn" id="key-w">W</div>
+              </div>
+              <div style="grid-area:2/1">
+                <div class="key-btn" id="key-a">A</div>
+              </div>
+              <div style="grid-area:2/2">
+                <div class="key-btn" id="key-s">S</div>
+              </div>
+              <div style="grid-area:2/3">
+                <div class="key-btn" id="key-d">D</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Arrow Keys -->
+          <div class="keys-section">
+            <div class="keys-label">// ARROWS — 📷 CAMERA ROTATION</div>
+            <div class="arrow-cluster">
+              <div style="grid-area:1/2">
+                <div class="key-btn" id="key-up">▲</div>
+              </div>
+              <div style="grid-area:2/1">
+                <div class="key-btn" id="key-left">◀</div>
+              </div>
+              <div style="grid-area:2/2">
+                <div class="key-btn" id="key-down">▼</div>
+              </div>
+              <div style="grid-area:2/3">
+                <div class="key-btn" id="key-right">▶</div>
+              </div>
+            </div>
+            <!-- Camera HUD -->
+            <div class="camera-hud">
+              <div class="cam-compass">
+                <div class="cam-compass-ring">
+                  <div class="cam-needle" id="cam-needle">▲</div>
+                </div>
+              </div>
+              <div class="cam-stats">
+                <div class="cam-stat">
+                  <span class="cam-stat-lbl">YAW</span>
+                  <span class="cam-stat-val" id="cam-yaw">0°</span>
+                </div>
+                <div class="cam-stat">
+                  <span class="cam-stat-lbl">PITCH</span>
+                  <span class="cam-stat-val" id="cam-pitch">+0°</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Key Legend -->
+          <div class="keys-label">// QUANTUM BIT ENCODING</div>
+          <table
+            style="width:100%;font-family:var(--font-mono);font-size:0.6rem;border-collapse:collapse;margin-bottom:14px;">
+            <thead>
+              <tr style="color:var(--army-amber);">
+                <th style="padding:3px 6px;text-align:left;">KEY</th>
+                <th style="padding:3px 6px;text-align:left;">BITS</th>
+                <th style="padding:3px 6px;text-align:left;">ACTION</th>
+              </tr>
+            </thead>
+            <tbody style="color:var(--text-primary);">
+              <tr>
+                <td style="padding:2px 6px;">W</td>
+                <td style="color:var(--army-amber);">00</td>
+                <td>🚁 MOVE FORWARD</td>
+              </tr>
+              <tr>
+                <td style="padding:2px 6px;">A</td>
+                <td style="color:var(--army-amber);">01</td>
+                <td>🚁 MOVE LEFT</td>
+              </tr>
+              <tr>
+                <td style="padding:2px 6px;">S</td>
+                <td style="color:var(--army-amber);">10</td>
+                <td>🚁 MOVE BACK</td>
+              </tr>
+              <tr>
+                <td style="padding:2px 6px;">D</td>
+                <td style="color:var(--army-amber);">11</td>
+                <td>🚁 MOVE RIGHT</td>
+              </tr>
+              <tr>
+                <td style="padding:2px 6px;">▲/▼</td>
+                <td style="color:#80c8ff;">--</td>
+                <td>📷 PITCH CAM</td>
+              </tr>
+              <tr>
+                <td style="padding:2px 6px;">◀/▶</td>
+                <td style="color:#80c8ff;">--</td>
+                <td>📷 YAW CAM</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <!-- Current Command Buffer -->
+          <div class="keys-label">// COMMAND BUFFER</div>
+          <div class="current-word-box" id="current-word-display">—</div>
+
+          <!-- Spacebar transmit -->
+          <div class="keys-label" style="margin-top:10px;">// TRANSMIT</div>
+          <div class="key-btn key-space" id="key-space">SPACE — SEND &amp; ENCRYPT</div>
+
+        </div>
+      </section>
+
+      <!-- ── CENTER PANEL: Radar ───────────────────────────────── -->
+      <section class="hud-panel radar-panel">
+        <div class="panel-title">
+          <div class="dot"></div> DRONE RADAR · GPS TRACK
+        </div>
+        <div class="panel-body" style="display:flex;flex-direction:column;align-items:center;gap:0;padding:14px;">
+          <div class="radar-wrap">
+            <canvas id="radar-canvas" width="380" height="380"></canvas>
+            <div class="radar-corner tl"></div>
+            <div class="radar-corner tr"></div>
+            <div class="radar-corner bl"></div>
+            <div class="radar-corner br"></div>
+          </div>
+        </div>
+
+        <!-- Stats below radar -->
+        <div class="radar-stats">
+          <div class="stat-box">
+            <span class="stat-label">GPS COORD</span>
+            <span class="stat-val" id="gps-coords">18.45002°N</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">ALTITUDE</span>
+            <span class="stat-val" id="altitude">120.0 m</span>
+          </div>
+          <div class="stat-box">
+            <span class="stat-label">RF FREQ</span>
+            <span class="stat-val" id="rf-freq">2.4001 GHz</span>
+          </div>
+        </div>
+
+        <!-- Protocol badges -->
+        <div class="protocol-strip">
+          <div class="proto-badge bb84">
+            ◈ BB84 PROTOCOL
+            <span class="proto-status">QUANTUM KEY EXCHANGE ACTIVE</span>
+          </div>
+          <div class="proto-badge pqp">
+            ◈ PQP CIPHER
+            <span class="proto-status">LATTICE-BASED ENCRYPTION ON</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── RIGHT PANEL: Data Stream + Storage ──────────────── -->
+      <section class="hud-panel">
+        <div class="panel-title">
+          <div class="dot"></div> QUANTUM DATA STREAM
+        </div>
+        <div class="panel-body" style="display:flex;flex-direction:column;gap:12px;">
+
+          <!-- Live quantum log -->
+          <div>
+            <div class="keys-label">// LIVE ENCODING LOG</div>
+            <div class="stream-log" id="stream-log">
+              <div class="log-entry" style="color:var(--text-dim);">
+                — awaiting quantum transmission —
+              </div>
+            </div>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Stored words -->
+          <div>
+            <div class="keys-label">// ENCODED WORD STORAGE</div>
+            <ul class="word-list" id="word-list">
+              <li style="font-family:var(--font-mono);font-size:0.6rem;color:var(--text-dim);padding:4px;">
+                — no words committed yet —
+              </li>
+            </ul>
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- Decryption section -->
+          <div class="decrypt-section">
+            <div class="keys-label">// DECRYPT MESSAGE</div>
+            <select class="hud-select" id="word-select">
+              <option value="">— SELECT MESSAGE —</option>
+            </select>
+            <input class="hud-input" id="decrypt-key-input" type="text" placeholder="ENTER KEY-ID (shown after SPACE)"
+              maxlength="12" autocomplete="off" spellcheck="false" />
+            <button class="hud-btn primary" id="btn-decrypt" style="width:100%;">
+              🔓 RUN QUANTUM DECRYPTION
+            </button>
+            <div class="decrypt-output" id="decrypt-output">— ENTER KEY-ID TO UNLOCK —</div>
+          </div>
+
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ══ FOOTER ══════════════════════════════════════════════ -->
+    <footer class="app-footer">
+      <span>V.A.J.R.A. Vision Aided Jam Resistant Routing & Autonomy</span>
+      <span class="footer-right">ENCRYPTION: BB84 + PQP · STATUS: ONLINE ●</span>
+    </footer>
+
+  </div>
+
+  <!-- Scripts: quantum.js must load first (no modules needed) -->
+  <script src="quantum.js"></script>
+  <script src="app.js"></script>
+  <script>
+    // Session ID + UTC clock
+    document.getElementById('session-id').textContent =
+      'QDC-' + Math.random().toString(36).slice(2, 7).toUpperCase();
+
+    setInterval(() => {
+      const now = new Date();
+      document.getElementById('utc-time').textContent =
+        now.toUTCString().split(' ')[4] + 'Z';
+    }, 1000);
+  </script>
+
+</body>
+
+</html>
